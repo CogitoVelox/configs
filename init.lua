@@ -1,0 +1,2 @@
+require("cogitovelox")
+print("hello")
