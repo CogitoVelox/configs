@@ -13,7 +13,8 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local plugins = {
-	'nvim-telescope/telescope.nvim'
+	'nvim-telescope/telescope.nvim',
+	'nvim-treesitter/nvim-treesitter'
 }
 
 local opts = {}
