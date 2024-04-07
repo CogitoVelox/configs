@@ -26,8 +26,11 @@ export XDG_DATA_HOME="$HOME/.local/share"
 SETTING UP WINDOWS KEYBOARD
 
 wget https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip
+
 unzip win32yank-x64.zip
+
 chmod +x win32yank.exe
+
 sudo mv win32yank.exe /usr/local/bin/
 
 The rest of the setup is in clipboard.lua
