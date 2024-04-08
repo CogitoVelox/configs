@@ -31,6 +31,8 @@ Append to ~/.bashrc:
 
 `export XDG_DATA_HOME="$HOME/.local/share"`
 
+`export TMUX_CONF="$HOME/.config/tmux/tmux.conf"`
+
 # SETTING UP WINDOWS CLIPBOARD
 
 `wget https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip`
