@@ -48,3 +48,14 @@ The rest of the setup is in clipboard.lua
 # SETTING UP ICONS
 Download a NerdFont from here and install _on Windows_ and set as terminal default:
 https://www.nerdfonts.com/font-downloads
+
+#SETTING UP CTAGS
+
+`sudo apt install exuberant-ctags`
+
+`ctags -R . `
+
+Jump to definition: `Ctrl-]`
+
+Jump back: `Ctrl+t`
+
