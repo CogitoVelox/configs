@@ -119,7 +119,7 @@ if [ -z "$SSH_AUTH_SOCK" ]; then
 	eval $(ssh-agent -s)
 fi
 
-export PATH=$PATH:/home/alex/bin
+export PATH=$PATH:/home/$USER/bin
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
