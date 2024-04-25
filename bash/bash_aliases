@@ -8,6 +8,7 @@ alias l='ls -CF'
 case "$(hostname)" in
     cell-4-1-33)
         alias penv=/home/xonar/.venv/bin/python3
+        alias xdev="cd /home/aheeren/XonarDev/xonar_core"
         ;;
     *)
         # default aliases for other machines
