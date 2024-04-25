@@ -5,4 +5,11 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-
+case "$(hostname)" in
+    cell-4-1-33)
+        alias penv=/home/xonar/.venv/bin/python3
+        ;;
+    *)
+        # default aliases for other machines
+        ;;
+esac
