@@ -19,3 +19,8 @@ echo "installing lazygit"
 sudo install lazygit /usr/local/bin/
 
 rm -rf lazygit lazygit.tar.gz LICENSE win32yank-x64.zip
+
+cd ~
+ln -s .config/bash/bashrc .bashrc
+ln -s .config/bash/bash_aliases .bash_aliases
+ln -s .config/clang-format/clang-format .clang-format
