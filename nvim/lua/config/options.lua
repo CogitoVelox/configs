@@ -21,3 +21,5 @@ vim.opt.signcolumn = "yes"
 vim.opt.colorcolumn = "80"
 
 vim.opt.tags = "./tags;,"
+
+vim.opt.clipboard = "unnamedplus"
