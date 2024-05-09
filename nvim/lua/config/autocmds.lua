@@ -14,7 +14,7 @@ end
 vim.api.nvim_create_augroup("ArduinoSetup", { clear = true })
 
 -- Autocommand to run setup function for .ino files
-vim.api.nvim_create_autocmd("BufRead,BufNewFile", {
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = "*.ino",
   group = "ArduinoSetup",
   callback = setup_arduino_files,
