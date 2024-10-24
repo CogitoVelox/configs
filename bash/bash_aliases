@@ -7,11 +7,19 @@ alias la='ls -A'
 alias l='ls -CF'
 
 case "$(hostname)" in
-    cell-4-1-33)
-        alias penv=/home/xonar/.venv/bin/python3
-        alias xdev="cd /home/aheeren/XonarDev/xonar_core"
-        ;;
-    *)
-        # default aliases for other machines
-        ;;
+cell-4-1-33)
+	alias penv=/home/xonar/.venv/bin/python3
+	alias xdev="cd /home/aheeren/XonarDev/xonar_core"
+	;;
+Xonar-EE-Station)
+	alias xdev="cd /home/alex/XonarDev/xonar_core"
+	;;
+*)
+	# default aliases for other machines
+	;;
 esac
+
+# Include local aliases if the file exists
+if [ -f ~/.bash_aliases_local ]; then
+	source ~/.bash_aliases_local
+fi
