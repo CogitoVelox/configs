@@ -10,6 +10,7 @@ To install neovim (via https://medium.com/thelinux/the-correct-way-to-install-th
 `cd ~`
 
 `wget https://github.com/neovim/neovim/releases/download/<version, e.g.: 'v0.9.5'>/nvim.appimage`
+https://github.com/neovim/neovim/releases/download/v0.10.2/nvim.appimage
 
 `chmod u+x nvim.appimage`
 
