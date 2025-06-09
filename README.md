@@ -59,3 +59,5 @@ Jump to definition: `Ctrl-]`
 
 Jump back: `Ctrl+t`
 
+# INSTALLING STARSHIP
+```curl -fsSL https://starship.rs/install.sh | bash
