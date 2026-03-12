@@ -48,7 +48,7 @@ fi
 # ---------------------------------------------------------------------------
 if command -v npm &>/dev/null && ! npm list -g tree-sitter-cli &>/dev/null; then
     info "Installing tree-sitter-cli..."
-    npm install -g tree-sitter-cli
+    sudo npm install -g tree-sitter-cli
     success "tree-sitter-cli installed."
 fi
 
