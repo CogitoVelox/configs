@@ -1,65 +1,99 @@
-# Based off of the 💤 LazyVim Template
+# Neovim Config
 
-A starter template for [LazyVim](https://github.com/LazyVim/LazyVim).
-Refer to the [documentation](https://lazyvim.github.io/installation) to get started.
+Based on [LazyVim](https://github.com/LazyVim/LazyVim).
 
-# INSTALLING NEOVIM
+## Setup (two steps)
 
-To install neovim (via https://medium.com/thelinux/the-correct-way-to-install-the-neovim-42f3076f9b88): 
+**1. Clone the repo**
 
-`cd ~`
+```bash
+git clone https://github.com/cogitovelox/configs ~/.config/clonedconfigs/configs
+```
 
-`wget https://github.com/neovim/neovim-releases/releases/download/<version, e.g.: 'v0.11.2'>/nvim-linux-x86_64.appimage`
+**2. Run the install script**
 
-[https://github.com/neovim/neovim-releases/releases/download/v0.11.2/nvim-linux-x86_64.appimage]
+```bash
+bash ~/.config/clonedconfigs/configs/install.sh
+```
 
-`chmod u+x nvim.appimage`
+Or, if you prefer to skip the clone and do it all in one shot:
 
-Test the permissions: 
-`./nvim.appimage`
+```bash
+curl -fsSL https://raw.githubusercontent.com/cogitovelox/configs/master/install.sh | bash
+```
 
-Move to appropriate folder 
-`sudo mv nvim.appimage /usr/local/bin/nvim`
+The script is safe to re-run — it skips anything already installed or symlinked.
 
-May have to restart terminal or source the path.
+### Keeping configs up to date
 
-# SETTING UP XDG
+Because the install script creates symlinks (e.g. `~/.config/nvim` → `~/.config/clonedconfigs/configs/nvim`), a simple pull is all you ever need to update your live config:
 
-Append to ~/.bashrc:
+```bash
+git -C ~/.config/clonedconfigs/configs pull
+```
 
-`export XDG_CONFIG_HOME="$HOME/.config"`
+### What the script does
 
-`export XDG_CACHE_HOME="$HOME/.cache"`
+- Installs system packages: `ripgrep`, `fd-find`, `npm`, `unzip`
+- Installs the latest **neovim** release (via appimage → `/usr/local/bin/nvim`)
+- Installs **lazygit** (latest release)
+- Installs **tree-sitter-cli** (via npm)
+- On WSL: installs **win32yank** for clipboard support
+- Symlinks `~/.config/nvim` → `~/.config/configs/nvim`
+- Symlinks `~/.clang-format` → `~/.config/configs/clang-format/clang-format`
 
-`export XDG_DATA_HOME="$HOME/.local/share"`
+On first launch, neovim will auto-install lazy.nvim and all plugins.
 
-`export TMUX_CONF="$HOME/.config/tmux/tmux.conf"`
+---
 
-# SETTING UP WINDOWS CLIPBOARD
+## Manual / optional setup
 
-`wget https://github.com/equalsraf/win32yank/releases/download/v0.0.4/win32yank-x64.zip`
+### Nerd Font (icons)
 
-`unzip win32yank-x64.zip`
+Download a Nerd Font from [nerdfonts.com](https://www.nerdfonts.com/font-downloads) and install it **on Windows** (for WSL), then set it as your terminal default.
 
-`chmod +x win32yank.exe`
+### Starship prompt
 
-`sudo mv win32yank.exe /usr/local/bin/`
+```bash
+curl -fsSL https://starship.rs/install.sh | bash
+```
 
-The rest of the setup is in clipboard.lua
+Then add to `~/.bashrc`:
 
-# SETTING UP ICONS
-Download a NerdFont from here and install _on Windows_ and set as terminal default:
-https://www.nerdfonts.com/font-downloads
+```bash
+eval "$(starship init bash)"
+```
 
-# SETTING UP CTAGS
+### ctags (jump-to-definition fallback)
 
-`sudo apt install exuberant-ctags`
+```bash
+sudo apt install exuberant-ctags
+ctags -R .
+```
 
-`ctags -R . `
+- Jump to definition: `Ctrl-]`
+- Jump back: `Ctrl-t`
 
-Jump to definition: `Ctrl-]`
+### XDG Base Directories
 
-Jump back: `Ctrl+t`
+If not already set, add to `~/.bashrc`:
 
-# INSTALLING STARSHIP
-`curl -fsSL https://starship.rs/install.sh | bash`
+```bash
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+```
+
+---
+
+## Plugins
+
+| Category | Plugin |
+|---|---|
+| Plugin manager | [lazy.nvim](https://github.com/folke/lazy.nvim) via LazyVim |
+| Language | TypeScript, JSON, C/C++ (clangd) |
+| UI | mini-animate |
+| Motion | flash.nvim (search mode disabled) |
+| Git | lazygit |
+
+Custom plugin specs live in `nvim/lua/plugins/`. See `example.lua` for a reference of common config patterns.
