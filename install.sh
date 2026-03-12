@@ -106,32 +106,40 @@ if grep -qi 'wsl' /proc/version 2>/dev/null; then
 fi
 
 # ---------------------------------------------------------------------------
-# 7. Symlink nvim config
+# 7. Initialize git submodules (tmux plugins, etc.)
 # ---------------------------------------------------------------------------
-NVIM_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/nvim"
-
-if [[ -L "$NVIM_CONFIG_DIR" ]]; then
-    success "~/.config/nvim symlink already exists."
-elif [[ -d "$NVIM_CONFIG_DIR" ]]; then
-    echo "[install] WARNING: $NVIM_CONFIG_DIR already exists as a real directory."
-    echo "          Back it up and remove it, then re-run this script to create the symlink."
-else
-    ln -s "$REPO_DIR/nvim" "$NVIM_CONFIG_DIR"
-    success "Symlinked $NVIM_CONFIG_DIR → $REPO_DIR/nvim"
-fi
+info "Updating git submodules..."
+git -C "$REPO_DIR" submodule update --init --recursive
+success "Submodules up to date."
 
 # ---------------------------------------------------------------------------
-# 8. Symlink clang-format config
+# 8. Symlinks
+#
+# Format: "repo/source/path:destination"
+# Add a new line here to symlink any new config to its expected location.
 # ---------------------------------------------------------------------------
-CLANG_FORMAT_SRC="$REPO_DIR/clang-format/clang-format"
-CLANG_FORMAT_DEST="$HOME/.clang-format"
+SYMLINKS=(
+    "nvim:${XDG_CONFIG_HOME:-$HOME/.config}/nvim"
+    "tmux:${XDG_CONFIG_HOME:-$HOME/.config}/tmux"
+    "clang-format/clang-format:$HOME/.clang-format"
+)
 
-if [[ -L "$CLANG_FORMAT_DEST" ]]; then
-    success "~/.clang-format symlink already exists."
-elif [[ ! -f "$CLANG_FORMAT_DEST" ]]; then
-    ln -s "$CLANG_FORMAT_SRC" "$CLANG_FORMAT_DEST"
-    success "Symlinked ~/.clang-format"
-fi
+# tmux plugin manager expects plugins at ~/.tmux/plugins — symlink that too
+mkdir -p "$HOME/.tmux"
+SYMLINKS+=("tmux/plugins:$HOME/.tmux/plugins")
+
+for entry in "${SYMLINKS[@]}"; do
+    src="$REPO_DIR/${entry%%:*}"
+    dest="${entry##*:}"
+    if [[ -L "$dest" ]]; then
+        success "$dest already symlinked."
+    elif [[ -e "$dest" ]]; then
+        echo "[install] WARNING: $dest already exists (not a symlink). Back it up and re-run."
+    else
+        ln -s "$src" "$dest"
+        success "Symlinked $dest → $src"
+    fi
+done
 
 # ---------------------------------------------------------------------------
 echo ""
