@@ -153,5 +153,41 @@ fi
 success "Run 'Ctrl+b I' inside tmux to install plugins."
 
 # ---------------------------------------------------------------------------
+# 9. Install JetBrainsMono Nerd Font
+# ---------------------------------------------------------------------------
+FONT_DIR="$HOME/.local/share/fonts"
+FONT_CHECK="$FONT_DIR/JetBrainsMonoNerdFont-Regular.ttf"
+
+if [[ ! -f "$FONT_CHECK" ]]; then
+    info "Installing JetBrainsMono Nerd Font..."
+    NERD_VERSION=$(curl -fsSL "https://api.github.com/repos/ryanoasis/nerd-fonts/releases/latest" \
+        | grep -Po '"tag_name": "\K[^"]*')
+    mkdir -p "$FONT_DIR"
+    curl -fsSL -o /tmp/JetBrainsMono.zip \
+        "https://github.com/ryanoasis/nerd-fonts/releases/download/${NERD_VERSION}/JetBrainsMono.zip"
+    unzip -o /tmp/JetBrainsMono.zip -d "$FONT_DIR" '*.ttf' -x '*Windows*'
+    rm -f /tmp/JetBrainsMono.zip
+    fc-cache -f "$FONT_DIR"
+    success "JetBrainsMono Nerd Font installed."
+else
+    success "JetBrainsMono Nerd Font already installed."
+fi
+
+# ---------------------------------------------------------------------------
+# 10. Set JetBrainsMono Nerd Font as GNOME Terminal default
+# ---------------------------------------------------------------------------
+if command -v gsettings &>/dev/null && gsettings get org.gnome.Terminal.ProfilesList default &>/dev/null 2>&1; then
+    GNOME_TERM_PROFILE=$(gsettings get org.gnome.Terminal.ProfilesList default | tr -d "'")
+    PROFILE_SCHEMA="org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:${GNOME_TERM_PROFILE}/"
+    if [[ "$(gsettings get "$PROFILE_SCHEMA" font 2>/dev/null)" != "'JetBrainsMono Nerd Font 12'" ]]; then
+        gsettings set "$PROFILE_SCHEMA" use-system-font false
+        gsettings set "$PROFILE_SCHEMA" font 'JetBrainsMono Nerd Font 12'
+        success "GNOME Terminal font set to JetBrainsMono Nerd Font 12."
+    else
+        success "GNOME Terminal font already set."
+    fi
+fi
+
+# ---------------------------------------------------------------------------
 echo ""
 echo "All done! Open neovim with 'nvim' — lazy.nvim will auto-install plugins on first launch."
