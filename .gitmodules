@@ -1,3 +1,0 @@
-[submodule "tmux/plugins/tmux-nerd-font-window-name"]
-	path = tmux/plugins/tmux-nerd-font-window-name
-	url = https://github.com/joshmedeski/tmux-nerd-font-window-name

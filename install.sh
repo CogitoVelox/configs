@@ -88,7 +88,16 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 6. WSL: install win32yank for clipboard support
+# 6a. Native Linux: install clipboard tools for tmux-yank
+# ---------------------------------------------------------------------------
+if ! grep -qi 'wsl' /proc/version 2>/dev/null && command -v apt-get &>/dev/null; then
+    info "Installing clipboard tools for tmux-yank (xsel for X11, wl-clipboard for Wayland)..."
+    sudo apt-get install -y xsel wl-clipboard
+    success "Clipboard tools installed."
+fi
+
+# ---------------------------------------------------------------------------
+# 6b. WSL: install win32yank for clipboard support
 # ---------------------------------------------------------------------------
 if grep -qi 'wsl' /proc/version 2>/dev/null; then
     if ! command -v win32yank.exe &>/dev/null; then
@@ -106,14 +115,7 @@ if grep -qi 'wsl' /proc/version 2>/dev/null; then
 fi
 
 # ---------------------------------------------------------------------------
-# 7. Initialize git submodules (tmux plugins, etc.)
-# ---------------------------------------------------------------------------
-info "Updating git submodules..."
-git -C "$REPO_DIR" submodule update --init --recursive
-success "Submodules up to date."
-
-# ---------------------------------------------------------------------------
-# 8. Symlinks
+# 7. Symlinks
 #
 # Format: "repo/source/path:destination"
 # Add a new line here to symlink any new config to its expected location.
@@ -124,13 +126,10 @@ SYMLINKS=(
     "clang-format/clang-format:$HOME/.clang-format"
 )
 
-# tmux plugin manager expects plugins at ~/.tmux/plugins — symlink that too
-mkdir -p "$HOME/.tmux"
-SYMLINKS+=("tmux/plugins:$HOME/.tmux/plugins")
-
 for entry in "${SYMLINKS[@]}"; do
     src="$REPO_DIR/${entry%%:*}"
     dest="${entry##*:}"
+    mkdir -p "$(dirname "$dest")"
     if [[ -L "$dest" ]]; then
         success "$dest already symlinked."
     elif [[ -e "$dest" ]]; then
@@ -140,6 +139,18 @@ for entry in "${SYMLINKS[@]}"; do
         success "Symlinked $dest → $src"
     fi
 done
+
+# ---------------------------------------------------------------------------
+# 8. Bootstrap TPM (tmux plugin manager)
+# ---------------------------------------------------------------------------
+if [[ ! -d "$HOME/.tmux/plugins/tpm/.git" ]]; then
+    info "Installing TPM..."
+    git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+    success "TPM installed."
+else
+    success "TPM already installed."
+fi
+success "Run 'Ctrl+b I' inside tmux to install plugins."
 
 # ---------------------------------------------------------------------------
 echo ""
